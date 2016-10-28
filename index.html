@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
+	<title></title>
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<link rel="stylesheet" href="css/animate.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<div id="container">
+		<!-- <div id="loading">
+			<img src="img/loading_img.gif" />
+		</div> -->
+
+		<audio id="audio" preload="load" src="media/clear.mp3"></audio>
+
+		<div id="computer" class="computer">
+			<div class="screen">
+				<img class="huawei_logo" src="img/huawei.png" />
+				<div class="rightTop">
+					<img class="battery" src="img/battery.png" />
+					<span id="time" class="time"></span>
+				</div>
+				<div id="screenShow" class="screenShow">
+					20151031
+				</div>
+			</div>
+			<div id="keybord_wrapper">
+				<table id="keybord">
+					<tbody>
+						<tr>
+							<td class="noTop">mc</td>
+							<td class="noTop border_left">m+</td>
+							<td class="noTop border_left">m-</td>
+							<td class="noTop border_left">mr</td>
+						</tr>
+						<tr>
+							<td id="clear">C<!-- <img class="clearBg" src="img/lightBg.png"/> --></td>
+							<td class="canPress notChoose border_left">÷</td>
+							<td class="canPress notChoose border_left">×</td>
+							<td class="canPress notChoose border_left">
+								<img class="backspace" src="img/backspace.png"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="canPress notChoose">7</td>
+							<td class="canPress notChoose border_left">8</td>
+							<td class="canPress notChoose border_left">9</td>
+							<td class="canPress notChoose border_left">-</td>
+						</tr>
+						<tr>
+							<td class="canPress notChoose">4</td>
+							<td class="canPress notChoose border_left">5</td>
+							<td class="canPress notChoose border_left">6</td>
+							<td class="canPress notChoose border_left">+</td>
+						</tr>
+						<tr>
+							<td class="canPress notChoose">1</td>
+							<td class="canPress notChoose border_left">2</td>
+							<td class="canPress notChoose border_left">3</td>
+							<td rowspan="2" class="canPress notChoose border_left">=</td>
+						</tr>
+						<tr>
+							<td class="canPress notChoose" colspan="2">0</td>
+							<td class="canPress notChoose border_left">.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div id="mainSwiper" class="swiper-container">
+		    <div class="swiper-wrapper">
+		    	<!-- slide1 -->
+		        <div class="swiper-slide page1">
+		        	<img class="p1_01" src="img/p1_01.png"/>
+		        	<div id="page_keyword" class="p1_02">
+		        	</div>
+		        	<img class="handIcon" src="img/handIcon.png" />
+		        </div>
+
+		        <!-- slide2 -->
+		        <div class="swiper-slide page2">
+		        	<img class="p2_img" src="img/p2_1.jpg">
+		        	<img class="p2_img p2_img2" src="img/p2_2.png">
+		        	<img class="handIcon" src="img/handIcon.png" />
+		        </div>
+
+		        <!-- slide3 -->
+		        <div class="swiper-slide page3">
+		        	<div class="p3_gray">
+		        		<img class="p3_img p3_img1" src="img/p3_1.jpg">
+		        	</div>
+		        	<div class="p3_white">
+		        		<img class="p3_img p3_img2" src="img/p3_2.jpg">
+		        	</div>
+		        	<img class="handIcon" src="img/handIcon2.png" />
+		        </div>
+
+		        <!-- slide4 -->
+		        <div class="swiper-slide page4">
+		        	<img class="p4_img" src="img/p4_1.png" />
+		        	<div class="btn_wrapper">
+		        		<a id="tryAgain" class="btn" href="javascript:;">再玩一次</a>
+		        		<a id="share" class="btn" href="javascript:;">我要分享</a>
+		        	</div>
+		        	<div class="mask">
+		        		<img class="handPoint" src="img/handPoint.png" />
+		        	</div>
+		        </div>
+		    </div>
+		    
+		</div>
+	</div>
+
+
+	<script type="text/javascript" src="js/jquery-2.1.3.js"></script>
+	<script type="text/javascript" src="js/swiper.jquery.min.js"></script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<div style="display:none">
+		<script type="text/javascript" src="http://s4.cnzz.com/z_stat.php?id=1256624295&web_id=1256624295"></script>
+	</div>
+	<script type="text/javascript">
+	window.onload = function(){
+
+		$("#container").fadeIn(100);
+
+		var keywords = [
+			"蛇精病","直男癌","剩斗士","拖延症","低头族","公主病","单身狗","玛丽苏","起床气","加班汪","心塞","强迫症","玻璃心","剁手党","无节操","鸡汤党","月光族"
+		];
+
+		var isChoose = false,
+			clickTimes = 0,
+			maxTimes = 3,
+			keyword = "一切";
+
+		// 时间
+		var $time = $("#time");
+		function getTime(){
+			var time = new Date(),
+				hour = time.getHours(),
+				min = time.getMinutes();
+
+			hour = hour < 10 ? "0" + hour : hour;
+			min = min < 10 ? "0" + min : min;
+
+			$time.text(hour + ":" + min);
+		}
+
+		getTime();
+		setInterval(getTime,5000);
+
+
+		// 键盘高度
+		var $win = $(window),
+			winH = $win.height(),
+			keybordH = winH - 200,
+			trH = keybordH/6;
+
+		$("#keybord").height(keybordH);
+		$("#keybord_wrapper").height(keybordH);
+		$("tr").height(trH);
+
+
+		// 键盘按键
+		var $canPress = $(".canPress"),
+			$screenShow = $("#screenShow"),
+			$keybord = $("#keybord"),
+			$clear = $("#clear"),
+			audio = $("#audio")[0],
+			$computer = $("#computer"),
+			$mainSwiper = $("#mainSwiper"),
+			$page_keyword = $("#page_keyword");
+
+
+		$canPress.on("touchstart",function(){
+			
+			if(isChoose) return;
+			var $this = $(this),
+				keyWordsLen = keywords.length,
+				random = Math.floor(Math.random() * keyWordsLen);
+
+			clickTimes++;
+			if(clickTimes >= maxTimes){
+				isChoose = true;
+				$clear.addClass("light");
+			}
+
+			keyword = keywords[random];
+			console.log(keyword);
+
+			$canPress.removeClass("notChoose");
+			$screenShow.text('20151031' + keyword);
+			
+			$this.addClass("lightBtn");
+
+		}).on("touchend",function(){
+			
+			$(this).removeClass("lightBtn");
+		});
+
+
+
+		$clear.on("touchstart",function(){
+			isChoose = true;
+			clickTimes = 0;
+			audio.play();
+			$screenShow.text("0");
+			$page_keyword.text('让“'+ keyword +'”归零');
+			$clear.addClass("lightBtn");
+
+			setTimeout(function(){
+				$computer.fadeOut(200);
+				$("title").text('让“'+ keyword +'”归零');
+
+				// 分享到朋友圈 配置
+				wx.onMenuShareTimeline({
+				    title: '10.31陈坤邀你，让"'+ keyword +'"归零', // 分享标题
+				    link: "http://zero.k-run.cn", // 分享链接
+				    imgUrl: "http://zero.k-run.cn/img/logo.jpg" // 分享图标
+				});
+
+				// 分享给朋友 配置
+				wx.onMenuShareAppMessage({
+				    title: '10.31陈坤邀你，让"'+ keyword +'"归零', // 分享标题
+				    desc: "2015行走的力量影像展邀请函", // 分享描述
+				    link: "http://zero.k-run.cn", // 分享链接
+				    imgUrl: "http://zero.k-run.cn/img/logo.jpg" // 分享图标
+				});
+			},1000);
+		}).on("touchend",function(){
+			if(isChoose){
+				$clear.removeClass("light");
+			}
+			$clear.removeClass("lightBtn");
+		});
+
+		// 再玩一次
+		$("#tryAgain").on("click",function(){
+			playAgain();
+		});
+
+		// 分享
+		var $mask = $(".mask");
+		$("#share").on("click",function(){
+			$mask.fadeIn(100);
+		});
+
+		$mask.on("click",function(){
+			$mask.fadeOut(100);
+		});
+
+		
+		var mainSwiper = $('#mainSwiper').swiper({
+			direction: 'vertical'
+		});
+
+		function playAgain(){
+			isChoose = false;
+			clickTimes = 0;
+			keyword = "一切";
+			$mask.hide();
+			$canPress.addClass("notChoose");
+			$computer.fadeIn(200);
+			$screenShow.text("20151031");
+			mainSwiper.slideTo(0);
+		}
+
+
+
+
+		/**
+		 * 微信认证
+		 */
+		$.post("http://wxtoken.k-run.cn/generate",{
+			url: location.href.split('#')[0]
+		},function(data){
+
+			data = JSON.parse(data);
+			console.log(data);
+
+			wx.config({
+				debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId : 'wx4c166202e798d4cc',  // 必填，公众号的唯一标识
+				timestamp : data.timestamp,  // 必填，生成签名的时间戳
+				nonceStr : data.noncestr,   // 必填，生成签名的随机串
+				signature : data.signature, // 必填，签名，见附录1
+				jsApiList : [ 'checkJsApi', 'chooseWXPay', 'getLocation', 'onMenuShareTimeline', 'onMenuShareAppMessage' ]
+			// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+
+
+
+			wx.ready(function(){
+				
+				// 分享到朋友圈 配置
+				wx.onMenuShareTimeline({
+				    title: '10.31陈坤邀你，让"'+ keyword +'"归零', // 分享标题
+				    link: "http://zero.k-run.cn", // 分享链接
+				    imgUrl: "http://zero.k-run.cn/img/logo.jpg" // 分享图标
+				});
+
+				// 分享给朋友 配置
+				wx.onMenuShareAppMessage({
+				    title: '10.31陈坤邀你，让"'+ keyword +'"归零', // 分享标题
+				    desc: "2015行走的力量影像展邀请函", // 分享描述
+				    link: "http://zero.k-run.cn", // 分享链接
+				    imgUrl: "http://zero.k-run.cn/img/logo.jpg" // 分享图标
+				});
+			});
+		});
+		
+	}
+	</script>
+</body>
+</html>
